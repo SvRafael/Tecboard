@@ -3,6 +3,7 @@ import { Banner } from './components/Banner'
 import {FormularioDeEvento} from './components/FormularioDeEvento' 
 import { Tema } from './components/Tema'
 import { Card } from './components/Card'
+import { useState } from 'react'
 
 function App() {
 
@@ -15,14 +16,18 @@ function App() {
     {id: 6, nome: 'data science'}
   ]
 
-  const eventos = [
+  const [eventos, setEventos] = useState([
     {
       capa: 'https://raw.githubusercontent.com/viniciosneves/tecboard-assets/refs/heads/main/imagem_1.png',
       tema: temas[0],
       data: new Date(),
       titulo: 'Mulheres no Front'
     }
-  ]
+  ])
+
+  function adicionarEvento(evento){
+    setEventos([...eventos, evento])
+  }
 
   return (
     <main>
@@ -30,12 +35,14 @@ function App() {
         <img src='/logo.png' alt='Logo'></img>
       </header>
       <Banner />
-      <FormularioDeEvento/>
+      <FormularioDeEvento temas={temas} aoSubmeter={adicionarEvento}/>
       {temas.map((item) => {
         return (
           <section key={item.id}>
             <Tema tema={item}/>
-            <Card evento={eventos[0]}/>
+            {eventos.map((item, index) => {
+              return <Card evento={item} key={index}/>
+            })}
           </section>
         )
       })}
